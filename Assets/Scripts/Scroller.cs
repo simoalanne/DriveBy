@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Scroller : MonoBehaviour
 {
     private RawImage _image;
-    [SerializeField] private float _speed = 0.2f;
+    [SerializeField] private float _speed = 0.5f;
 
     void Start()
     {
