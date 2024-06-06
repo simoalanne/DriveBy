@@ -9,6 +9,7 @@ public class Menu : MonoBehaviour
     [SerializeField] private Canvas _menuCanvas;
     [SerializeField] private Canvas _carSelectionCanvas;
     [SerializeField] private Canvas _gameEndMenu;
+    [SerializeField] private Canvas _highScoresMenu;
     [SerializeField] private float _menuFadeOutSpeed = 0.75f;
     [SerializeField] private Sprite[] _carSprites;
     [SerializeField] private GameObject _playerCar;
@@ -17,6 +18,7 @@ public class Menu : MonoBehaviour
     [SerializeField] private TMP_Text _carSelectionText;
     [SerializeField] private float _gameEndMenuActive = 4f;
     [SerializeField] private TMP_Text _gameEndMenuText;
+    [SerializeField] private TMP_Text[] _highScoreTexts;
     private bool _isGameStarted = false;
     public bool IsGameStarted => _isGameStarted;
     public Sprite[] CarSprites => _carSprites;
@@ -29,6 +31,7 @@ public class Menu : MonoBehaviour
         _selectedCarIndex = PlayerPrefs.GetInt("SelectedCar", (_carSprites.Length - 1) / 2); // Get player's selected car index or set to the middle of the array
         UpdateCarSelection(); // Update car sprite
         ValidateCarSelectionIndex(); // Disable corresponding button if at the end or beginning of the array
+        LoadHighScores();
     }
 
     void Update()
@@ -46,6 +49,11 @@ public class Menu : MonoBehaviour
         if (_carSelectionCanvas.enabled && Input.GetKeyDown(KeyCode.LeftArrow))
         {
             SelectPreviousCar();
+        }
+
+        if (_highScoresMenu.enabled && Input.GetKeyDown(KeyCode.Space))
+        {
+            CloseHighScores();
         }
     }
 
@@ -159,6 +167,26 @@ public class Menu : MonoBehaviour
         if (_gameEndMenuActive <= 0)
         {
             SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
+    public void OpenHighScores()
+    {
+        _highScoresMenu.enabled = true;
+        _menuCanvas.enabled = false;
+    }
+
+    public void CloseHighScores()
+    {
+        _highScoresMenu.enabled = false;
+        _menuCanvas.enabled = true;
+    }
+
+    private void LoadHighScores()
+    {
+        for (int i = 0; i < HighScoreManager.Instance.HighScores.Count; i++)
+        {
+            _highScoreTexts[i].text = i + 1 + ". " + HighScoreManager.Instance.HighScores[i].ToString();
         }
     }
 }

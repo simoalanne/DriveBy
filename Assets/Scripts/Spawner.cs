@@ -19,9 +19,9 @@ public class Spawner : MonoBehaviour
     public Vector2[] SpawnPoints => _spawnPoints;
     private bool _isMaxDifficultyReached = false;
     private int _currentScore = 0;
+    public int CurrentScore => _currentScore;
     private DisplayScore _displayScore;
     private PlayerMovement _playerMovement;
-
 
     void Awake()
     {
@@ -57,7 +57,11 @@ public class Spawner : MonoBehaviour
 
             _usedSpawnPoints.Clear(); // Reset used spawn points once done spawning cars.
             _currentScore += amountToSpawnAtOnce;
-            _displayScore.UpdateScore(_currentScore);
+            if (_playerMovement.GameOver != true)
+            {
+                _displayScore.UpdateScore(_currentScore);
+            }
+
             yield return new WaitForSeconds(_initialSpawnRate);
             if (_initialSpawnRate > _fastestSpawnRate)
             {
