@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _targetPosition;
     private bool _isMoving = false;
     private Menu _menu;
+    private bool _gameOver = false;
+    public bool GameOver => _gameOver;
 
     void Awake()
     {
@@ -53,8 +55,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Car"))
         {
+            _gameOver = true;
+            _menu.EndGame();
+            FindObjectOfType<DisplayScore>().UpdateScore(0);
+            HighScoreManager.Instance.CheckForHighScore(FindObjectOfType<Spawner>().CurrentScore);
             Destroy(gameObject);
-            FindObjectOfType<Menu>().EndGame();
         }
     }
 }
